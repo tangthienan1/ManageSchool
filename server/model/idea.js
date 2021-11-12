@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 var schema = new mongoose.Schema({
-    name : {
-        type : String,
+    name: {
+        type: String,
         required: true
     },
-    email : {
+    email: {
         type: String,
         required: true,
         unique: true
     },
-    gender : String,
-    status : String
+    gender: String,
+    status: String
 })
 
-const Userdb = mongoose.model('userdb', schema);
+const IdeaModel = mongoose.model('ideadb', schema);
 
-module.exports = Userdb;
+module.exports = IdeaModel;

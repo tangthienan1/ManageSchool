@@ -12,9 +12,9 @@ route.get('/', services.homeRoutes);
 
 /**
  *  @description add users
- *  @method GET /add-user
+ *  @method GET /add-topic
  */
-route.get('/add-user', services.add_user)
+route.get('/add-topic', services.add_user)
 
 /**
  *  @description for update user
@@ -28,6 +28,7 @@ route.post('/api/users', controller.create);
 route.get('/api/users', controller.find);
 route.put('/api/users/:id', controller.update);
 route.delete('/api/users/:id', controller.delete);
-
+route.post('/api/register', controller.register);
+route.post('/api/login', controller.login);
 
 module.exports = route
