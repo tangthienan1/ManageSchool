@@ -2,7 +2,8 @@ var TopicModel = require('../model/topic');
 var UserModel = require('../model/user');
 var IdeaModel = require('../model/idea');
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const { default: Axios } = require('axios');
 // create and save new topic
 exports.create = (req, res) => {
     // validate request
@@ -139,14 +140,22 @@ exports.delete = (req, res) => {
             });
         });
 }
-exports.login = (req, res) => {
-    if(!req.body){
-        res.status(400).send({message: 'Empty login form !!'})
+exports.login = async (req, res) => {
+    if (!req.body) {
+        res.status(401).send({ message: 'Empty login form !!' })
         return;
     }
+    UserModel.findOne({email: req.body.email})
+    .then(user=>{
+        if (!user) res.status(404).json({error: 'no user with that email found'})
+        else if (req.body.password === user.password) {
+         res.status(200);
+         res.redirect('/')   
+        }
+        else res.status(403).json({error: 'passwords do not match'})
+    })
 
 }
-
 exports.register = async (req, res) => {
     if (!req.body) {
         res.status(400).send({ message: "Content can not be emtpy!" });
@@ -157,23 +166,23 @@ exports.register = async (req, res) => {
 
     // new user
     const user = new UserModel({
-        user: req.body.name,
+        email: req.body.email,
         password: req.body.password,
         role: req.body.role,
     })
 
-    // save user in the database
     user
         .save(user)
         .then(data => {
-            console.log('data',data)
-            res.send(data)
             res.redirect('/login');
+            res.send(data)
+            res.status(200)
         })
         .catch(err => {
             res.status(500).send({
                 message: err.message || "Some error occurred while creating a create operation"
             });
         });
+
 
 }
