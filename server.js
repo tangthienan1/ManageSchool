@@ -6,7 +6,7 @@ const path = require('path');
 const connectDB = require('./server/database/connection');
 
 const app = express();
-dotenv.config( { path : 'config.env'} )
+dotenv.config( { path : '.env'} )
 const PORT = process.env.PORT || 8080
 
 // log requests
@@ -29,6 +29,8 @@ app.use('/js', express.static(path.resolve(__dirname, "assets/js")))
 
 // load routers
 app.use('/', require('./server/routes/router'))
+
+
 
 app.get('/login', (req,res)=>{
     res.render('login')

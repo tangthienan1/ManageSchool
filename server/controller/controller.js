@@ -65,6 +65,38 @@ exports.find = (req, res) => {
 
 }
 
+exports.findUser = (req, res) => {
+
+    if (req.query.id) {
+        const id = req.query.id;
+
+        UserModel.findById(id)
+            .then(data => {
+                if (!data) {
+                    res.status(404).send({ message: "Not found topic with id " + id })
+                } else {
+                    res.send(data)
+                }
+            })
+            .catch(err => {
+                res.status(500).send({ message: "Error retrieving topic with id " + id })
+            })
+
+    } else {
+        UserModel.find()
+            .then(user => {
+                res.send(user)
+            })
+            .catch(err => {
+                res.status(500).send({ message: err.message || "Error Occurred while retrieving user information" })
+            })
+    }
+
+
+}
+
+
+
 // Update a new idetified topic by topic id
 exports.update = (req, res) => {
     if (!req.body) {
@@ -108,6 +140,10 @@ exports.delete = (req, res) => {
         });
 }
 exports.login = (req, res) => {
+    if(!req.body){
+        res.status(400).send({message: 'Empty login form !!'})
+        return;
+    }
 
 }
 
@@ -116,12 +152,7 @@ exports.register = async (req, res) => {
         res.status(400).send({ message: "Content can not be emtpy!" });
         return;
     }
-    try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        
-    } catch (error) {
 
-    }
     // validate request
 
     // new user
